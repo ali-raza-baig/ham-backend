@@ -31,7 +31,9 @@ mongoose.connect(MONGODB_URI, {
 // Routes (inject io to routes)
 const dataRouter = require('./routes/data')(io);
 app.use('/api/data', dataRouter);
-
+app.get('/', (req, res) => {
+  res.send(`hello world`)
+})
 // Simple health
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
