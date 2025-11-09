@@ -17,24 +17,11 @@
     },
     {
       "src": "/(.*\\.(css|js|png|jpg|jpeg|svg|ico|json|txt|woff|woff2|ttf|otf|eot|ttc|map|webp))",
-      "dest": "/client/dist/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
+      "dest": "/client/dist/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/client/dist/index.html"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "server.js": {
-      "runtime": "nodejs20.x",
-      "memory": 512,
-      "maxDuration": 10
-    }
-  }
+  ]
 }
