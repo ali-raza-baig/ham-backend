@@ -1,15 +1,40 @@
 {
   "version": 2,
   "builds": [
-    { "src": "server.js", "use": "@vercel/node" },
-    { "src": "client/dist/**/*", "use": "@vercel/static" }
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/dist/**/*",
+      "use": "@vercel/static"
+    }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/server.js" },
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    },
     {
       "src": "/(.*\\.(css|js|png|jpg|jpeg|svg|ico|json|txt|woff|woff2|ttf|otf|eot|ttc|map|webp))",
-      "dest": "/client/dist/$1"
+      "dest": "/client/dist/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
     },
-    { "src": "/(.*)", "dest": "/client/dist/index.html" }
-  ]
+    {
+      "src": "/(.*)",
+      "dest": "/client/dist/index.html"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "server.js": {
+      "runtime": "nodejs20.x",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  }
 }

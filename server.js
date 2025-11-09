@@ -37,12 +37,12 @@ app.get('/', (req, res) => {
 // Simple health
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-io.on('connection', (socket) => {
-  console.log('Socket connected', socket.id);
-  socket.on('disconnect', () => {
-    console.log('Socket disconnected', socket.id);
-  });
-});
+// io.on('connection', (socket) => {
+//   console.log('Socket connected', socket.id);
+//   socket.on('disconnect', () => {
+//     console.log('Socket disconnected', socket.id);
+//   });
+// });
 
 server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
