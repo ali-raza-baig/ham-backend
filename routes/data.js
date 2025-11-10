@@ -23,17 +23,22 @@ router.post('/',
             const ts = timestamp ? new Date(timestamp) : new Date();
 
             const allReading = await Measurement.findOne({ device_id }).sort({ timestamp: -1 })
-            const lastReading = allReading?.lastEnergy
-            const energyReading = energy - Number(lastReading)
+            const lastReading = allReading?.lastEnergy ?? 0; // default to 0 if no previous reading
+            const energyReading = (energy !== undefined ? Number(energy) : 0) - Number(lastReading);
+
+            // Only save if energyReading is a valid number
+            const safeEnergyReading = !isNaN(energyReading) ? energyReading : 0;
+
             const doc = new Measurement({
                 device_id,
                 voltage,
                 current,
                 power,
-                energy: Number(energyReading),
+                energy: safeEnergyReading,
                 frequency,
                 timestamp: ts
             });
+
 
             const saved = await doc.save();
 
