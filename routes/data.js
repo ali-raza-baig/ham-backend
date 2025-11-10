@@ -24,13 +24,13 @@ router.post('/',
 
             const allReading = await Measurement.findOne({ device_id }).sort({ timestamp: -1 })
             const lastReading = allReading?.lastEnergy
-            const energyReading = energy - lastReading
+            const energyReading = energy - Number(lastReading)
             const doc = new Measurement({
                 device_id,
                 voltage,
                 current,
                 power,
-                energy: energyReading,
+                energy: Number(energyReading),
                 frequency,
                 timestamp: ts
             });
