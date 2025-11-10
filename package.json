@@ -1,19 +1,32 @@
 {
-  "name": "pzem-backend",
+  "name": "backend",
   "version": "1.0.0",
+  "description": "",
   "main": "server.js",
-  "license": "MIT",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ali-raza-baig/ham-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ali-raza-baig/ham-backend/issues"
+  },
+  "homepage": "https://github.com/ali-raza-baig/ham-backend#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
-    "express": "^4.18.2",
-    "express-validator": "^7.0.1",
-    "helmet": "^6.0.0",
-    "mongoose": "^7.0.0"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.0",
+    "helmet": "^8.1.0",
+    "mongoose": "^8.19.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
