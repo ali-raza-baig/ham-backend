@@ -6,6 +6,7 @@ const MeasurementSchema = new mongoose.Schema({
     current: { type: Number, default: null },
     power: { type: Number, default: null },
     energy: { type: Number, default: null }, // kWh
+    lastEnergy: { type: Number, default: null }, // kWh
     frequency: { type: Number, default: null },
     timestamp: { type: Date, required: true, index: true }
 }, { timestamps: true });
