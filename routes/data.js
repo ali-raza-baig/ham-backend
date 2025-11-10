@@ -5,7 +5,8 @@ const router = express.Router();
 
 
 // POST /api/data
-router.post('/',
+router.post(
+    '/',
     body('device_id').isString().trim().notEmpty(),
     body('voltage').optional().isFloat({ min: 0 }),
     body('current').optional().isFloat({ min: 0 }),
@@ -19,26 +20,42 @@ router.post('/',
 
         try {
             const { device_id, voltage, current, power, energy, frequency, timestamp } = req.body;
-            console.log(req.body)
+
             const ts = timestamp ? new Date(timestamp) : new Date();
 
-            const allReading = await Measurement.findOne({ device_id }).sort({ timestamp: -1 })
-            const lastReading = allReading?.lastEnergy ?? 0; // default to 0 if no previous reading
-            const energyReading = (energy !== undefined ? Number(energy) : 0) - Number(lastReading);
+            // Find the last measurement for this device
+            const lastMeasurement = await Measurement.findOne({ device_id }).sort({ timestamp: -1 });
+            const lastEnergy = lastMeasurement?.lastEnergy ?? 0;
 
-            // Only save if energyReading is a valid number
-            const safeEnergyReading = !isNaN(energyReading) ? energyReading : 0;
+            // Ensure energy is a number
+            const currentEnergy = energy !== undefined ? Number(energy) : 0;
+            let energyReading;
+
+            if (lastMeasurement) {
+                if (currentEnergy === lastEnergy) {
+                    // No new consumption
+                    energyReading = 0;
+                } else {
+                    // Calculate delta
+                    energyReading = currentEnergy - lastEnergy;
+                }
+            } else {
+                // First reading
+                energyReading = currentEnergy;
+            }
+
+            // Safety fallback
+            if (isNaN(energyReading)) energyReading = 0;
 
             const doc = new Measurement({
                 device_id,
                 voltage,
                 current,
                 power,
-                energy: safeEnergyReading,
+                energy: energyReading,
                 frequency,
                 timestamp: ts
             });
-
 
             const saved = await doc.save();
 
@@ -49,6 +66,7 @@ router.post('/',
         }
     }
 );
+
 
 // GET /api/data/latest?device_id=ESP32-001
 router.get('/latest', async (req, res) => {
