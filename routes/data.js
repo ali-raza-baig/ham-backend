@@ -54,6 +54,17 @@ router.get('/latest', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+router.get('/last-one', async (req, res) => {
+    try {
+        const device_id = req.query.device_id;
+        const filter = device_id ? { device_id } : {};
+        const latest = await Measurement.findOne(filter).sort({ timestamp: -1 });
+        return res.json({ data: latest || null });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
 
 // GET /api/data/history?device_id=&page=1&limit=50&from=&to=
 router.get('/history', [
