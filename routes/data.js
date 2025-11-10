@@ -52,6 +52,7 @@ router.post(
                 voltage,
                 current,
                 power,
+                lastEnergy: energy,
                 energy: energyReading,
                 frequency,
                 timestamp: ts
