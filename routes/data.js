@@ -125,4 +125,26 @@ router.get('/history', [
     }
 });
 
+// /api/data/usage
+router.get('/usage', async (req, res) => {
+    const now = new Date();
+    const last24 = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const last30 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    const data24 = await Measurement.aggregate([
+        { $match: { createdAt: { $gte: last24, $lte: now } } },
+        { $group: { _id: null, totalEnergy: { $sum: "$energy" } } }
+    ]);
+
+    const data30 = await Measurement.aggregate([
+        { $match: { createdAt: { $gte: last30, $lte: now } } },
+        { $group: { _id: null, totalEnergy: { $sum: "$energy" } } }
+    ]);
+
+    res.json({
+        last24hUsage: data24[0]?.totalEnergy || 0,
+        last30dUsage: data30[0]?.totalEnergy || 0
+    });
+});
+
 module.exports = router;
