@@ -34,7 +34,7 @@ router.post(
             if (lastMeasurement) {
                 if (currentEnergy === lastEnergy) {
                     // No new consumption
-                    energyReading = energy;
+                    energyReading = currentEnergy - lastEnergy;
                 } else {
                     // Calculate delta
                     energyReading = currentEnergy - lastEnergy;
